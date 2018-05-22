@@ -17,9 +17,9 @@ private String requestUrl;
 
     @Override
     public List<News> loadInBackground() {
-        List<News> newsList = QueryUtils.fetchEarthquakeData(requestUrl);
+        // Do all the network job here
 
-        return newsList;
+        return QueryUtils.fetchEarthquakeData(requestUrl);
     }
 
     @Override

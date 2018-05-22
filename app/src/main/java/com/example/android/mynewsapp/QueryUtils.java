@@ -1,5 +1,7 @@
 package com.example.android.mynewsapp;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -37,8 +39,7 @@ public class QueryUtils {
             Log.e("QueryUtils", "Problem making the HTTP request.", e);
         }
 
-        // Extract relevant fields from the JSON response and create a list
-        // Return the list
+        // Extract relevant fields from the JSON response and create and return a list
         return extractFeatureFromJson(jsonResponse);
     }
 
@@ -117,13 +118,28 @@ public class QueryUtils {
         return output.toString();
     }
 
+    /**
+     * Convert the String urlString containing image URL into a bitmap
+     */
+    private static Bitmap loadImage(String urlString) {
+        Bitmap bitmap = null;
+
+        try {
+            InputStream in = new java.net.URL(urlString).openStream();
+            bitmap = BitmapFactory.decodeStream(in);
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            e.printStackTrace();
+        }
+        return bitmap;
+
+    }
 
     private static List<News> extractFeatureFromJson(String newsJSON) {
         // If the JSON string is empty or null, then return early.
         if (TextUtils.isEmpty(newsJSON)) {
             return null;
         }
-
         // Create an empty ArrayList that we can start adding news to
         List<News> newsList = new ArrayList<>();
 
@@ -135,47 +151,32 @@ public class QueryUtils {
             // Create a JSONObject from the JSON response string
             JSONObject baseJsonResponse = new JSONObject(newsJSON);
 
+            // Extract proper values from the JSONObject
             JSONObject response = baseJsonResponse.optJSONObject("response");
-
-            // Extract the JSONArray associated with the key called "features",
-            // which represents a list of features (or newsList).
             JSONArray resultsArray = response.optJSONArray("results");
 
-            // For each earthquake in the earthquakeArray, create an {@link Earthquake} object
+            // For each news in the resultsArray, create an News object from the extracted data
             for (int i = 0; i < resultsArray.length(); i++) {
 
-                // Get a single earthquake at position i within the list of newsList
+                // Get a single news at position i within the list of newsList
                 JSONObject currentNews = resultsArray.getJSONObject(i);
 
+                // Extract all the information we need
                 String title = currentNews.optString("webTitle");
                 String section = currentNews.optString("sectionName");
-                String author = currentNews.optString("type");
                 String date = currentNews.optString("webPublicationDate");
                 String url = currentNews.optString("webUrl");
+                JSONObject fields = currentNews.optJSONObject("fields");
+                String author = fields.optString("byline");
+                String imageUrl = fields.optString("thumbnail");
 
+                // Create a Bitmap object from the imageUrl in loadImage method
+                Bitmap image = loadImage(imageUrl);
 
-//                // For a given earthquake, extract the JSONObject associated with the
-//                // key called "properties", which represents a list of all properties
-//                // for that earthquake.
-//                //JSONObject properties = currentNews.getJSONObject("properties");
-//
-//                // Extract the value for the key called "mag"
-//                double magnitude = properties.getDouble("mag");
-//
-//                // Extract the value for the key called "place"
-//                String location = properties.getString("place");
-//
-//                // Extract the value for the key called "time"
-//                long time = properties.getLong("time");
-//
-//                // Extract the value for the key called "url"
-//                String url = properties.getString("url");
+                // Create a new News object with all the info required in constructor
+                News news = new News(title, section, author, date, url, image);
 
-                // Create a new {@link Earthquake} object with the magnitude, location, time,
-                // and url from the JSON response.
-                News news = new News(title, section, author, date, url);
-
-                // Add the new {@link Earthquake} to the list of newsList.
+                // Add the new News object to the list of newsList
                 newsList.add(news);
             }
 
@@ -183,9 +184,8 @@ public class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+            Log.e("QueryUtils", "Problem parsing the guardian JSON results", e);
         }
-
         // Return the list of newsList
         return newsList;
     }

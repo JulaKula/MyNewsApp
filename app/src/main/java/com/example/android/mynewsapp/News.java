@@ -1,6 +1,7 @@
 package com.example.android.mynewsapp;
 
-import java.net.URL;
+import android.graphics.Bitmap;
+
 
 public class News {
 
@@ -14,12 +15,16 @@ public class News {
 
     private String mURL;
 
-    public News (String title, String section, String author, String date, String url){
+    private Bitmap mImage;
+
+    // Set one constructor, containing all the info from the News object
+    public News(String title, String section, String author, String date, String url, Bitmap image) {
         mTitle = title;
         mSection = section;
         mAuthor = author;
         mDate = date;
         mURL = url;
+        mImage = image;
     }
 
     public String getTitle() {
@@ -38,7 +43,11 @@ public class News {
         return mDate;
     }
 
-    public String getURL() {
+    public String getUrl() {
         return mURL;
+    }
+
+    public Bitmap getImage() {
+        return mImage;
     }
 }
