@@ -1,11 +1,23 @@
 <resources>
     <string name="app_name">My News App</string>
     <string name="no_internet_connection">No Internet connection.</string>
-    <string name="no_news">Currently there are no news for you. You can always come later and check for all new stories.</string>
+    <string name="no_news">Currently there are no news for you.\nYou can always come later and check for all new stories.</string>
     <string name="no_author">Author unknown</string>
     <string name="no_date">Date unknown</string>
     <string name="section">, Section:\ </string>
     <string name="by">By\ </string>
     <string name="source">Tap to go to the source page</string>
 
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">News Settings</string>
+    <string name="settings_topic_label">Choose the topic of the news</string>
+    <string name="settings_topic_key" translatable="false">topic</string>
+    <string name="settings_topic_default" translatable="false">horse</string>
+    <string name="settings_order_by_label">Order By</string>
+    <string name="settings_order_by_key" translatable="false">order_by</string>
+    <string name="settings_order_by_default" translatable="false">@string/settings_order_by_relevance_value</string>
+    <string name="settings_order_by_relevance_label">Relevance</string>
+    <string name="settings_order_by_relevance_value" translatable="false">relevance</string>
+    <string name="settings_order_by_newest_label">Newest</string>
+    <string name="settings_order_by_newest_value" translatable="false">newest</string>
 </resources>

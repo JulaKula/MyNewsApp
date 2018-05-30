@@ -19,7 +19,7 @@ private String requestUrl;
     public List<News> loadInBackground() {
         // Do all the network job here
 
-        return QueryUtils.fetchEarthquakeData(requestUrl);
+        return QueryUtils.fetchNewsData(requestUrl);
     }
 
     @Override
